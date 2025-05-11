@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: 'Mark and Close Stale Questions'
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 02:00 UTC daily
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639
+        with:
+          stale-issue-label: 'stale'
+          stale-issue-message: >
+            This question has been marked as stale because it has been inactive for 7 days.
+            It will be closed if no further activity occurs within the next 14 days.
+            Thank you for your understanding.
+          days-before-stale: 7
+          days-before-close: 14
+          close-issue-message: 'We are very sorry, but the issue is closed due to insufficient information to resolve it.'
+          only-labels: 'question'
+          exempt-all-pr-assignees: true
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
